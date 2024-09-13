@@ -1,25 +1,21 @@
 package com.white;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.white.mapper.UserMapper;
 import com.white.meta.enums.JstInterfaceEnum;
 import com.white.meta.request.InventoryRequest;
 import com.white.meta.request.InventoryResponse;
 import com.white.meta.request.JstRequest;
 import com.white.meta.utils.OKHttpUtil;
-import com.white.po.User;
-import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.object.SqlUpdate;
 
-import java.time.LocalDateTime;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @SpringBootTest
 class WhiteApplicationTests {
@@ -87,4 +83,33 @@ class WhiteApplicationTests {
         }
         System.out.println("all = " + JSON.toJSONString(all));
     }
+
+    @Test
+    void export() {
+        // 生成20w条数据，格式为https://m.you.163.com/spark/index?appConfig=1_1_1&xhh=XXX字符串，并打印到指定文件
+        String urlTemplate = "https://m.you.163.com/spark/index?appConfig=1_1_1&xhh=";
+        String filePath = "D:\\test.txt";
+        int count = 200000;
+
+        try (FileWriter writer = new FileWriter(filePath, false)) { // 以覆盖模式打开文件
+            for (int i = 0; i < count; i++) {
+                // 生成随机的16位UUID字符串
+                UUID uuid = UUID.randomUUID();
+                String xhh = uuid.toString().replace("-", "").substring(0, 16);
+                String newUrl = urlTemplate + xhh;
+
+                writer.write(newUrl + "\n"); // 直接写入文件
+
+                if (i % 10000 == 0) {
+                    System.out.println("已生成" + i + "条数据");
+                }
+            }
+        } catch (IOException e) {
+            // 更好地处理异常，例如记录日志
+            System.err.println("文件写入错误: " + e.getMessage());
+        }
+
+        System.out.println("生成完毕");
+    }
+
 }
