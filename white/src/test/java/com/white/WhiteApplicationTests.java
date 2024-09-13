@@ -9,7 +9,9 @@ import com.white.meta.request.InventoryResponse;
 import com.white.meta.request.JstRequest;
 import com.white.meta.utils.OKHttpUtil;
 import com.white.po.User;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,31 +24,31 @@ import java.util.Map;
 @SpringBootTest
 class WhiteApplicationTests {
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Test
-    void selectList() {
-        userMapper.selectList(null).forEach(System.out::println);
-    }
-
-    @Test
-    void insert() {
-        User user = new User();
-        user.setId(0L);
-        user.setUsername("");
-        user.setPassword("");
-        user.setPhone("");
-        user.setInfo("");
-        user.setStatus(0);
-        user.setBalance(0);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-
-        userMapper.insert(user);
-
-        System.out.println("user = " + user);
-    }
+    // @Resource
+    // private UserMapper userMapper;
+    //
+    // @Test
+    // void selectList() {
+    //     userMapper.selectList(null).forEach(System.out::println);
+    // }
+    //
+    // @Test
+    // void insert() {
+    //     User user = new User();
+    //     user.setId(0L);
+    //     user.setUsername("");
+    //     user.setPassword("");
+    //     user.setPhone("");
+    //     user.setInfo("");
+    //     user.setStatus(0);
+    //     user.setBalance(0);
+    //     user.setCreateTime(LocalDateTime.now());
+    //     user.setUpdateTime(LocalDateTime.now());
+    //
+    //     userMapper.insert(user);
+    //
+    //     System.out.println("user = " + user);
+    // }
 
     @Test
     void inventoryQuery() {
@@ -55,7 +57,7 @@ class WhiteApplicationTests {
         InventoryRequest request = new InventoryRequest();
         request.setModified_begin("2024-09-06 00:00:00");
         request.setModified_end("2024-09-07 00:00:00");
-
+        List<InventoryResponse.InventoryData> all = Lists.newArrayList();
         while(true){
             request.setPage_index(index).setPage_size(limit);
 
@@ -69,9 +71,8 @@ class WhiteApplicationTests {
             InventoryResponse inventory = JSON.parseObject(res, InventoryResponse.class);
             List<InventoryResponse.InventoryData> datas = inventory.getInventorys();
             datas.forEach(data -> {
-                if(StringUtils.isBlank(data.getI_id()) && StringUtils.isBlank(data.getSku_id())){
-                    System.out.println("syncJstWarehouseStock i_id sku_id blank, name {}" + data.getName());
-                    return;
+                if(!(StringUtils.isBlank(data.getI_id()) && StringUtils.isBlank(data.getSku_id()))){
+                    all.add(data);
                 }
             });
 
@@ -84,5 +85,6 @@ class WhiteApplicationTests {
             } catch (InterruptedException e) {
             }
         }
+        System.out.println("all = " + JSON.toJSONString(all));
     }
 }

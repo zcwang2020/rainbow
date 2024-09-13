@@ -1,7 +1,7 @@
 package com.white.meta.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.white.meta.constant.JstConstant;
 import com.white.meta.enums.JstInterfaceEnum;
 import com.white.meta.request.JstResponse;
@@ -9,13 +9,11 @@ import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class OKHttpUtil {
 
@@ -39,8 +37,8 @@ public class OKHttpUtil {
                 logger.error("jst request {} result blank", JSON.toJSONString(type));
                 return null;
             }
-
-            JstResponse res = JSON.parseObject(result, JstResponse.class);
+            Gson gson = new Gson();
+            JstResponse res = gson.fromJson(result, JstResponse.class);
             if (res.isSuccess()) {
                 return res.getData().toString();
             } else{
