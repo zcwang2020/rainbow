@@ -89,7 +89,7 @@ class WhiteApplicationTests {
         // 生成20w条数据，格式为https://m.you.163.com/spark/index?appConfig=1_1_1&xhh=XXX字符串，并打印到指定文件
         String urlTemplate = "https://m.you.163.com/spark/index?appConfig=1_1_1&xhh=";
         String filePath = "D:\\test.txt";
-        int count = 200000;
+        int count = 60000;
 
         try (FileWriter writer = new FileWriter(filePath, false)) { // 以覆盖模式打开文件
             for (int i = 0; i < count; i++) {
