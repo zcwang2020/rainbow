@@ -1,18 +1,25 @@
 package com.white;
 
 import com.alibaba.fastjson.JSON;
+import com.white.mapper.BaomidouUserMapper;
+import com.white.mapper.UserMapper;
 import com.white.meta.enums.JstInterfaceEnum;
 import com.white.meta.request.InventoryRequest;
 import com.white.meta.request.InventoryResponse;
 import com.white.meta.request.JstRequest;
 import com.white.meta.utils.OKHttpUtil;
+import com.white.po.BaomidouUser;
+import com.white.po.User;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,31 +27,29 @@ import java.util.UUID;
 @SpringBootTest
 class WhiteApplicationTests {
 
-    // @Resource
-    // private UserMapper userMapper;
-    //
-    // @Test
-    // void selectList() {
-    //     userMapper.selectList(null).forEach(System.out::println);
-    // }
-    //
-    // @Test
-    // void insert() {
-    //     User user = new User();
-    //     user.setId(0L);
-    //     user.setUsername("");
-    //     user.setPassword("");
-    //     user.setPhone("");
-    //     user.setInfo("");
-    //     user.setStatus(0);
-    //     user.setBalance(0);
-    //     user.setCreateTime(LocalDateTime.now());
-    //     user.setUpdateTime(LocalDateTime.now());
-    //
-    //     userMapper.insert(user);
-    //
-    //     System.out.println("user = " + user);
-    // }
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    void selectList() {
+        List<User> baomidouUsers = userMapper.selectList(null);
+        System.out.println("users = " + baomidouUsers);
+    }
+
+    @Test
+    void insert() {
+        User user = new User();
+        user.setUsername("tmind");
+        user.setPassword("123456");
+        user.setPhone("12345678901");
+        user.setInfo(JSON.toJSONString(""));
+        user.setStatus(0);
+        user.setBalance(0);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        userMapper.insert(user);
+    }
+
 
     @Test
     void inventoryQuery() {

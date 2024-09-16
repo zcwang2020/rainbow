@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: white
+  datasource:
+    url: jdbc:mysql://localhost:3306/white?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: abc123
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+server:
+  port: 8081
+
+
