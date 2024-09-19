@@ -56,4 +56,6 @@ public class User {
      * Timestamp when the user was last updated
      */
     private LocalDateTime updateTime;
+
+    private Long count;
 }
