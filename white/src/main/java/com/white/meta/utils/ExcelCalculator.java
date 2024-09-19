@@ -22,8 +22,6 @@ public class ExcelCalculator {
         String filePath = "D:\\excel.xlsx"; // Excel文件路径
         String sheetName = "Sheet1"; // 工作表名称
 
-        List<String> operations = Arrays.asList("add", "subtract"); // 运算列表，如：["add", "subtract"]
-
         // 指定多个单元格坐标
         List<Integer[]> cellCoordinates = new ArrayList<>();
         cellCoordinates.add(new Integer[]{0, 0}); // 第1行第1列
@@ -31,7 +29,7 @@ public class ExcelCalculator {
         cellCoordinates.add(new Integer[]{1, 0}); // 第2行第1列
         try {
             // 读取Excel文件并执行运算
-            Map<List<Integer[]>, Double> results = performOperations(filePath, sheetName, cellCoordinates, operations);
+            Map<List<Integer[]>, Double> results = performOperations(filePath, sheetName, cellCoordinates, "add");
             // 输出结果
             printResults(results);
         } catch (IOException e) {
@@ -45,12 +43,12 @@ public class ExcelCalculator {
      * @param filePath 文件路径
      * @param sheetName 工作表名称
      * @param cellCoordinates 单元格坐标列表
-     * @param operations 运算列表（"add", "subtract", "multiply", "divide"）
+     * @param operation 运算列表（"add", "subtract", "multiply", "divide"）
      * @return 运算结果（Map<Coordinate, Result>）
      * @throws IOException 如果读取文件失败
      */
     public static Map<List<Integer[]>, Double> performOperations(String filePath, String sheetName,
-                                                           List<Integer[]> cellCoordinates, List<String> operations) throws IOException {
+                                                           List<Integer[]> cellCoordinates, String operation) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Workbook workbook = new XSSFWorkbook(fis);
             Sheet sheet = workbook.getSheet(sheetName);
@@ -79,7 +77,7 @@ public class ExcelCalculator {
             }
 
             // 执行指定的运算
-            double result = calculate(values, operations);
+            double result = calculate(values, operation);
 
             Map<List<Integer[]>, Double> resultMap = new HashMap<>();
             // key是所有列的列及值
@@ -92,14 +90,13 @@ public class ExcelCalculator {
      * 根据指定的运算符列表计算数值列表的结果
      *
      * @param values 数值列表
-     * @param operations 运算符列表
+     * @param operation 运算符列表
      * @return 计算结果
      */
-    private static double calculate(List<Double> values, List<String> operations) {
+    private static double calculate(List<Double> values, String operation) {
         double total = values.get(0);
         for (int i = 1; i < values.size(); i++) {
-            String op = operations.get(i - 1);
-            switch (op) {
+            switch (operation) {
                 case "add":
                     total += values.get(i);
                     break;
@@ -113,7 +110,7 @@ public class ExcelCalculator {
                     total /= values.get(i);
                     break;
                 default:
-                    throw new IllegalArgumentException("Unsupported operation: " + op);
+                    throw new IllegalArgumentException("Unsupported operation: " + operation);
             }
         }
         return total;
