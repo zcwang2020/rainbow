@@ -5,6 +5,7 @@ import com.white.po.User;
 import com.white.request.UserRequest;
 import com.white.service.IUserService;
 import com.white.vo.UserVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,10 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
 
     @RequestMapping("")
     public List<UserVO> list() {
@@ -47,6 +48,7 @@ public class UserController {
     // 增删改查，增加count
     @RequestMapping("/add")
     public String add(@RequestBody UserRequest request) {
+        // request 转 User
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
