@@ -1,4 +1,4 @@
-package com.white.po;
+package com.white.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -9,16 +9,12 @@ import java.time.LocalDateTime;
 
 /**
  * @Author: tmind
- * @Date: 2024/9/10 10:54
+ * @Date: 2024/9/19 15:30
  * @Description:
  */
 @Data
-public class User {
+public class UserVO {
 
-    /**
-     * id自增
-     */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
