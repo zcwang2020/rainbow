@@ -25,4 +25,8 @@ public class MpServiceTest {
         List<User> list = userService.list();
         System.out.println("list = " + JSON.toJSONString(list));
     }
+
+    void queryUserAndAddress() {
+
+    }
 }

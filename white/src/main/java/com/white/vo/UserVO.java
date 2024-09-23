@@ -3,9 +3,11 @@ package com.white.vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.white.entity.Address;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @Author: tmind
@@ -62,4 +64,7 @@ public class UserVO {
 
     @TableField(exist = false)
     private String show;
+
+    private List<Address> addressList;
+
 }

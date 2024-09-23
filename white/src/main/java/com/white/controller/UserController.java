@@ -1,8 +1,12 @@
 package com.white.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.white.entity.Address;
+import com.white.mapper.UserMapper;
 import com.white.po.User;
 import com.white.request.UserRequest;
+import com.white.service.IAddressService;
 import com.white.service.IUserService;
 import com.white.vo.UserVO;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,8 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final IUserService userService;
+
+    private final IAddressService addressService;
 
     @RequestMapping("")
     public List<UserVO> list() {
@@ -91,6 +97,10 @@ public class UserController {
     @RequestMapping("/detail/{id}")
     public UserVO detail(@PathVariable Long id) {
         User user = userService.getById(id);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        List<Address> list = Db.lambdaQuery(Address.class).eq(Address::getUserId, user.getId()).list();
         UserVO userVO = new UserVO();
         userVO.setId(user.getId());
         userVO.setUsername(user.getUsername());
@@ -103,6 +113,7 @@ public class UserController {
         userVO.setCreateTime(user.getCreateTime());
         userVO.setUpdateTime(user.getUpdateTime());
         userVO.setShow(userVO.getUsername() + ":" + userVO.getPassword());
+        userVO.setAddressList(list);
         return userVO;
     }
 
