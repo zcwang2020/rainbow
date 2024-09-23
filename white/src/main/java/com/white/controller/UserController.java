@@ -3,14 +3,14 @@ package com.white.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.white.entity.Address;
-import com.white.mapper.UserMapper;
 import com.white.po.User;
 import com.white.request.UserRequest;
 import com.white.service.IAddressService;
 import com.white.service.IUserService;
 import com.white.vo.UserVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,13 +25,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "用户管理")
 public class UserController {
 
     private final IUserService userService;
 
     private final IAddressService addressService;
 
-    @RequestMapping("")
+    @Operation(summary = "列表", description = "列表4864865645")
+    @GetMapping("")
     public List<UserVO> list() {
         // 查询转UserVO
         return userService.list().stream().map(user -> {
@@ -51,8 +53,8 @@ public class UserController {
         }).collect(Collectors.toList());
     }
 
-    // 增删改查，增加count
-    @RequestMapping("/add")
+    @Operation(summary = "添加", description = "添加12154234354")
+    @PostMapping("/add")
     public String add(@RequestBody UserRequest request) {
         // request 转 User
         User user = new User();
@@ -67,15 +69,18 @@ public class UserController {
         user.setUpdateTime(LocalDateTime.now());
         user.setCount(request.getCount());
         userService.save(user);
+
         return "success";
     }
 
+    @Operation(summary = "删除", description = "删除5644686446")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         userService.removeById(id);
         return "success";
     }
 
+    @Operation(summary = "修改", description = "修改154645534453")
     @PostMapping("/update")
     public String update(@RequestBody UserRequest request) {
         User user = new User();
@@ -94,7 +99,8 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping("/detail/{id}")
+    @Operation(summary = "详情", description = "详情56454685534564543")
+    @GetMapping("/detail/{id}")
     public UserVO detail(@PathVariable Long id) {
         User user = userService.getById(id);
         if (user == null) {
