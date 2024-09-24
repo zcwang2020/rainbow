@@ -28,7 +28,7 @@ public class UserRequest {
     @Schema(description = "电话号码", example = "13800138000")
     private String phone;
 
-    @Schema(description = "个人信息", example = "喜欢编程")
+    @Schema(description = "个人信息")
     private UserJsonInfo info;
 
     @Schema(description = "状态", example = "1")

@@ -1,6 +1,8 @@
 package com.white.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.white.entity.Address;
 import com.white.po.User;
@@ -34,9 +36,11 @@ public class UserController {
 
     @Operation(summary = "列表", description = "列表")
     @GetMapping("")
-    public List<UserVO> list() {
+    public IPage<UserVO> list(@RequestParam(defaultValue = "1", required = false) Integer pageNo,
+                             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         // 查询转UserVO
-        return userService.list().stream().map(user -> {
+        IPage<User> page = userService.page(Page.of(pageNo, pageSize));
+        List<UserVO> collect = page.getRecords().stream().map(user -> {
             UserVO userVO = new UserVO();
             userVO.setId(user.getId());
             userVO.setUsername(user.getUsername());
@@ -51,6 +55,9 @@ public class UserController {
             userVO.setShow(userVO.getUsername() + ":" + userVO.getPassword());
             return userVO;
         }).collect(Collectors.toList());
+        IPage<UserVO> userVOPage = Page.of(page.getCurrent(), page.getSize(), page.getTotal());
+        userVOPage.setRecords(collect);
+        return userVOPage;
     }
 
     @Operation(summary = "添加", description = "添加")
