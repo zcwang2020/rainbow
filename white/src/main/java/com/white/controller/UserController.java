@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.white.entity.Address;
 import com.white.po.User;
 import com.white.request.UserRequest;
-import com.white.service.IAddressService;
 import com.white.service.IUserService;
 import com.white.vo.UserVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "用户管理")
+@Schema(name = "UserController", description = "用户管理1")
 public class UserController {
 
     private final IUserService userService;
 
-    private final IAddressService addressService;
-
-    @Operation(summary = "列表", description = "列表4864865645")
+    @Operation(summary = "列表", description = "列表")
     @GetMapping("")
     public List<UserVO> list() {
         // 查询转UserVO
@@ -53,7 +53,7 @@ public class UserController {
         }).collect(Collectors.toList());
     }
 
-    @Operation(summary = "添加", description = "添加12154234354")
+    @Operation(summary = "添加", description = "添加")
     @PostMapping("/add")
     public String add(@RequestBody UserRequest request) {
         // request 转 User
@@ -73,14 +73,14 @@ public class UserController {
         return "success";
     }
 
-    @Operation(summary = "删除", description = "删除5644686446")
+    @Operation(summary = "删除", description = "删除")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         userService.removeById(id);
         return "success";
     }
 
-    @Operation(summary = "修改", description = "修改154645534453")
+    @Operation(summary = "修改", description = "修改")
     @PostMapping("/update")
     public String update(@RequestBody UserRequest request) {
         User user = new User();
@@ -99,9 +99,10 @@ public class UserController {
         return "success";
     }
 
-    @Operation(summary = "详情", description = "详情56454685534564543")
-    @GetMapping("/detail/{id}")
-    public UserVO detail(@PathVariable Long id) {
+    @Operation(summary = "详情", description = "根据id查询用户及地址详情",
+            parameters = {@Parameter(name = "id", description = "用户ID")})
+    @GetMapping("/detail")
+    public UserVO detail(@RequestParam Long id) {
         User user = userService.getById(id);
         if (user == null) {
             throw new RuntimeException("用户不存在");
