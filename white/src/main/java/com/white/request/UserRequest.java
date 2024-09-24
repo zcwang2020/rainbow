@@ -1,5 +1,6 @@
 package com.white.request;
 
+import com.white.meta.enums.UserStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -30,7 +31,7 @@ public class UserRequest {
     private String info;
 
     @Schema(description = "状态", example = "1")
-    private int status;
+    private UserStatusEnum status;
 
     @Schema(description = "余额", example = "1000")
     private int balance;

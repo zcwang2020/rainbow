@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.white.mapper.UserMapper;
 import com.white.meta.enums.JstInterfaceEnum;
+import com.white.meta.enums.UserStatusEnum;
 import com.white.meta.request.InventoryRequest;
 import com.white.meta.request.InventoryResponse;
 import com.white.meta.request.JstRequest;
@@ -71,7 +72,7 @@ class WhiteApplicationTests {
         user.setPassword("123456");
         user.setPhone("12345678901");
         user.setInfo(JSON.toJSONString(""));
-        user.setStatus(0);
+        user.setStatus(UserStatusEnum.LOCKED);
         user.setBalance(0);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());

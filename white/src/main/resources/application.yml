@@ -12,14 +12,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
-### mybatis-plus逻辑删除配置
+
 mybatis-plus:
   global-config:
     db-config:
+      ### mybatis-plus逻辑删除配置
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
-
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
 
 springdoc:
   swagger-ui:

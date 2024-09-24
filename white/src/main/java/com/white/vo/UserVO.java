@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.white.entity.Address;
+import com.white.meta.enums.UserStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -42,7 +43,7 @@ public class UserVO {
     /**
      * 使用状态，1正常，0冻结
      */
-    private int status = 0;
+    private UserStatusEnum status;
 
     /**
      * Balance of the user
