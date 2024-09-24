@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.white.entity.Address;
 import com.white.meta.enums.UserStatusEnum;
+import com.white.po.UserJsonInfo;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class UserVO {
     /**
      * 详细信息
      */
-    private String info;
+    private UserJsonInfo info;
 
     /**
      * 使用状态，1正常，0冻结

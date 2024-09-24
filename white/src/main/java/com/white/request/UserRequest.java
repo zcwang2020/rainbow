@@ -1,6 +1,7 @@
 package com.white.request;
 
 import com.white.meta.enums.UserStatusEnum;
+import com.white.po.UserJsonInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -28,7 +29,7 @@ public class UserRequest {
     private String phone;
 
     @Schema(description = "个人信息", example = "喜欢编程")
-    private String info;
+    private UserJsonInfo info;
 
     @Schema(description = "状态", example = "1")
     private UserStatusEnum status;

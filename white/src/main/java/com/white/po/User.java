@@ -3,6 +3,9 @@ package com.white.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.white.meta.enums.UserStatusEnum;
 import lombok.Data;
 
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
  * @Description:
  */
 @Data
+@TableName(value = "tb_user", autoResultMap = true)
 public class User {
 
     /**
@@ -40,7 +44,8 @@ public class User {
     /**
      * 详细信息
      */
-    private String info;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private UserJsonInfo info;
 
     /**
      * 使用状态，1正常，0冻结

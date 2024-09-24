@@ -61,7 +61,7 @@ public class UserController {
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setPhone(request.getPhone());
-        user.setInfo(JSON.toJSONString(request.getInfo()));
+        user.setInfo(request.getInfo());
         user.setStatus(request.getStatus());
         user.setBalance(request.getBalance());
         // 当前时间
@@ -88,7 +88,7 @@ public class UserController {
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setPhone(request.getPhone());
-        user.setInfo(JSON.toJSONString(request.getInfo()));
+        user.setInfo(request.getInfo());
         user.setStatus(request.getStatus());
         user.setBalance(request.getBalance());
         // 当前时间

@@ -5,6 +5,6 @@
 <mapper namespace="com.white.mapper.UserMapper">
 
     <update id="updateCountByIds">
-        update user set count = count + #{count} ${ew.customSqlSegment}
+        update tb_user set count = count + #{count} ${ew.customSqlSegment}
     </update>
 </mapper>

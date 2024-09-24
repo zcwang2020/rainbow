@@ -11,6 +11,7 @@ import com.white.meta.request.InventoryResponse;
 import com.white.meta.request.JstRequest;
 import com.white.meta.utils.OKHttpUtil;
 import com.white.po.User;
+import com.white.po.UserJsonInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ class WhiteApplicationTests {
         user.setUsername("tmind");
         user.setPassword("123456");
         user.setPhone("12345678901");
-        user.setInfo(JSON.toJSONString(""));
+        user.setInfo(new UserJsonInfo());
         user.setStatus(UserStatusEnum.LOCKED);
         user.setBalance(0);
         user.setCreateTime(LocalDateTime.now());
