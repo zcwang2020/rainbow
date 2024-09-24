@@ -66,4 +66,6 @@ public class User {
 
     @TableField(exist = false)
     private String show;
+
+    private Integer deleted;
 }

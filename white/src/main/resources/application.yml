@@ -1,3 +1,7 @@
+### 端口
+server:
+  port: 8081
+
 spring:
   application:
     name: white
@@ -8,8 +12,14 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
-server:
-  port: 8081
+### mybatis-plus逻辑删除配置
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
 
 springdoc:
   swagger-ui:
@@ -17,4 +27,6 @@ springdoc:
     ### 自定义路径，配置后自动跳转swagger地址——/swagger-ui/index.html
     path: /doc
 # http://localhost:8081/swagger-ui/index.html
-
+logging:
+  level:
+    com.white: debug

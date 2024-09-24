@@ -74,8 +74,8 @@ public class UserController {
     }
 
     @Operation(summary = "删除", description = "删除")
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    public String delete(@RequestParam Long id) {
         userService.removeById(id);
         return "success";
     }
