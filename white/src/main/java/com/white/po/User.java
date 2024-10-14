@@ -44,6 +44,7 @@ public class User {
     /**
      * 详细信息
      */
+    // JSON处理器, 需要搭配，autoResultMap = true， @TableName(value = "tb_user", autoResultMap = true)
     @TableField(typeHandler = JacksonTypeHandler.class)
     private UserJsonInfo info;
 
