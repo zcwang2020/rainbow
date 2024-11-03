@@ -75,7 +75,6 @@ public class UserController {
         user.setUpdateTime(LocalDateTime.now());
         user.setCount(request.getCount());
         userService.save(user);
-
         return "success";
     }
 
