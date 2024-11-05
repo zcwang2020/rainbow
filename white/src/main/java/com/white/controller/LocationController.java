@@ -76,6 +76,7 @@ public class LocationController {
     @PostMapping("/get/location")
     @ResponseBody
     public void upload(@RequestPart("file") MultipartFile file, HttpServletResponse response) {
+        log.info("上传文件：{}", file.getOriginalFilename());
         List<UploadData> uploadData = excelService.importExcel(file);
         ArrayList<Location> locationList = new ArrayList<>(BATCH_COUNT);
         List<ExportData> exportDataList = new ArrayList<>(uploadData.size());
