@@ -1,6 +1,7 @@
 package com.white.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,9 +38,11 @@ public class Location {
     private String latitude;
 
     @Schema(description = "创建时间")
-    private Long createdTime;
+    // @TableField("create_time")
+    private Long createTime;
 
     @Schema(description = "更新时间")
-    private Long updatedTime;
+    // @TableField("update_time")
+    private Long updateTime;
 
 }

@@ -75,7 +75,7 @@ public class LocationController {
 
     @PostMapping("/get/location")
     @ResponseBody
-    public void upload(@RequestPart("file") MultipartFile file, , HttpServletResponse response) {
+    public void upload(@RequestPart("file") MultipartFile file, HttpServletResponse response) {
         List<UploadData> uploadData = excelService.importExcel(file);
         ArrayList<Location> locationList = new ArrayList<>(BATCH_COUNT);
         List<ExportData> exportDataList = new ArrayList<>(uploadData.size());
@@ -83,8 +83,8 @@ public class LocationController {
             for (UploadData data : uploadData) {
                 Location location = new Location();
                 BeanUtils.copyProperties(data, location);
-                location.setCreatedTime(System.currentTimeMillis());
-                location.setUpdatedTime(System.currentTimeMillis());
+                location.setCreateTime(System.currentTimeMillis());
+                location.setUpdateTime(System.currentTimeMillis());
                 String address = data.getAddress();
                 if (StringUtils.isNotBlank(address)) {
                     Pair<String, String> lonAndLat = LocationUtils.getLonAndLat(address, key);
@@ -95,6 +95,7 @@ public class LocationController {
                 }
                 locationList.add(location);
                 ExportData exportData = new ExportData();
+                exportData.setName(address);
                 exportData.setAddress(address);
                 exportData.setLongitude(location.getLongitude());
                 exportData.setLatitude(location.getLatitude());
