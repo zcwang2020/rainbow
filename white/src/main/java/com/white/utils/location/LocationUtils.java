@@ -2,6 +2,7 @@ package com.white.utils.location;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class LocationUtils {
 
-    public static Map getLonAndLat(String address, String key) {
+    public static String getLonAndLat(String address, String key) {
         // 返回输入地址address的经纬度信息, 格式是 经度,纬度
         String queryUrl = "http://restapi.amap.com/v3/geocode/geo?key=" + key + "&address=" + address;
         // 高德接口返回的是JSON格式的字符串
@@ -26,12 +27,9 @@ public class LocationUtils {
             String location = jobJSON.get("location").toString();
             System.out.println("经纬度：" + location);
             if (Strings.isNotBlank(location)) {
-                String[] lonAndLat = location.split(",");
-                map.put("lng", lonAndLat[0]);
-                map.put("lat", lonAndLat[1]);
+                return location;
             }
-            System.out.println(map);
-            return map;
+            return null;
         } else {
             throw new RuntimeException("地址转换经纬度失败，错误码：" + obj.get("infocode"));
         }
