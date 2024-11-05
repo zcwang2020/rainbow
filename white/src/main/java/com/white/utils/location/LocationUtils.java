@@ -1,12 +1,16 @@
 package com.white.utils.location;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.substring;
 
 /**
  * @Author: tmind
@@ -15,19 +19,20 @@ import java.util.Map;
  */
 public class LocationUtils {
 
-    public static String getLonAndLat(String address, String key) {
+    public static Pair<String, String> getLonAndLat(String address, String key) {
         // 返回输入地址address的经纬度信息, 格式是 经度,纬度
         String queryUrl = "http://restapi.amap.com/v3/geocode/geo?key=" + key + "&address=" + address;
         // 高德接口返回的是JSON格式的字符串
         String queryResult = getResponse(queryUrl);
         Map<String, String> map = new HashMap<>();
         JSONObject obj = JSONObject.parseObject(queryResult);
-        if (obj.get("status").toString().equals("1")) {
-            JSONObject jobJSON = JSONObject.parseObject(obj.get("geocodes").toString().substring(1, obj.get("geocodes").toString().length() - 1));
-            String location = jobJSON.get("location").toString();
+        if ("1".equals(obj.get("status").toString()) && Integer.parseInt(obj.get("status").toString()) > 0) {
+            List<JSONObject> geocodes = JSONObject.parseArray(obj.get("geocodes").toString(), JSONObject.class);
+            String location = geocodes.get(0).get("location").toString();
             System.out.println("经纬度：" + location);
             if (Strings.isNotBlank(location)) {
-                return location;
+                String[] split = location.split(",");
+                return Pair.of(split[0], split[1]);
             }
             return null;
         } else {
