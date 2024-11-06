@@ -77,16 +77,16 @@ public class LocationController {
     @ResponseBody
     public void upload(@RequestPart("file") MultipartFile file, HttpServletResponse response) {
         log.info("上传文件：{}", file.getOriginalFilename());
-        List<UploadData> uploadData = excelService.importExcel(file);
+        List<UploadData> uploadDataList = excelService.importExcel(file);
         ArrayList<Location> locationList = new ArrayList<>(BATCH_COUNT);
-        List<ExportData> exportDataList = new ArrayList<>(uploadData.size());
-        if (CollectionUtils.isNotEmpty(uploadData)) {
-            for (UploadData data : uploadData) {
+        List<ExportData> exportDataList = new ArrayList<>(uploadDataList.size());
+        if (CollectionUtils.isNotEmpty(uploadDataList)) {
+            for (UploadData uploadData : uploadDataList) {
                 Location location = new Location();
-                BeanUtils.copyProperties(data, location);
+                BeanUtils.copyProperties(uploadData, location);
                 location.setCreateTime(System.currentTimeMillis());
                 location.setUpdateTime(System.currentTimeMillis());
-                String address = data.getAddress();
+                String address = uploadData.getAddress();
                 if (StringUtils.isNotBlank(address)) {
                     Pair<String, String> lonAndLat = LocationUtils.getLonAndLat(address, key);
                     if (null != lonAndLat) {
@@ -96,10 +96,11 @@ public class LocationController {
                 }
                 locationList.add(location);
                 ExportData exportData = new ExportData();
-                exportData.setName(address);
-                exportData.setAddress(address);
+                exportData.setName(uploadData.getOrderId());
                 exportData.setLongitude(location.getLongitude());
                 exportData.setLatitude(location.getLatitude());
+                exportData.setAddress(address);
+                exportData.setDescription(uploadData.getName() + " " + uploadData.getPhone());
                 exportDataList.add(exportData);
                 // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
                 if (locationList.size() >= BATCH_COUNT) {

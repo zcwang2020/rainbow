@@ -26,27 +26,23 @@ public class Location {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @Excel(name = "订单号")
     private String orderId;
 
-    @Excel(name = "收货人省份")
     private String province;
 
-    @Excel(name = "收货人城市")
     private String city;
 
-    @Excel(name = "收货人地区")
     private String district;
 
-    @Excel(name = "详细收货地址/提货地址")
     private String address;
-
-    @Excel(name = "订单创建时间")
-    private String orderTime;
 
     private String longitude;
 
     private String latitude;
+
+    private String name;
+
+    private String phone;
 
     @Schema(description = "创建时间")
     // @TableField("create_time")

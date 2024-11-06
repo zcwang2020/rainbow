@@ -1,6 +1,7 @@
 package com.white.meta.request;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.hutool.core.date.DateTime;
 import lombok.Data;
 
 /**
@@ -26,6 +27,10 @@ public class UploadData {
     @Excel(name = "详细收货地址/提货地址")
     private String address;
 
-    @Excel(name = "订单创建时间")
-    private String orderTime;
+    @Excel(name = "收货人/提货人")
+    private String name;
+
+    @Excel(name = "收货人手机号/提货人手机号")
+    private String phone;
+
 }
