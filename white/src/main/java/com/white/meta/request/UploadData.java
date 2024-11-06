@@ -11,15 +11,21 @@ import lombok.Data;
 @Data
 public class UploadData {
 
-    @Excel(name = "省份")
+    @Excel(name = "订单号")
+    private String orderId;
+
+    @Excel(name = "收货人省份")
     private String province;
 
-    @Excel(name = "城市")
+    @Excel(name = "收货人城市")
     private String city;
 
-    @Excel(name = "区县")
+    @Excel(name = "收货人地区")
     private String district;
 
-    @Excel(name = "详细地址")
+    @Excel(name = "详细收货地址/提货地址")
     private String address;
+
+    @Excel(name = "订单创建时间")
+    private String orderTime;
 }
