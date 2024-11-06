@@ -1,5 +1,7 @@
 package com.white.controller;
 
+import cn.afterturn.easypoi.csv.CsvImportUtil;
+import cn.afterturn.easypoi.csv.entity.CsvImportParams;
 import cn.hutool.core.lang.Pair;
 import com.alibaba.fastjson.JSON;
 import com.white.entity.Location;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +80,19 @@ public class LocationController {
     @ResponseBody
     public void upload(@RequestPart("file") MultipartFile file, HttpServletResponse response) {
         log.info("上传文件：{}", file.getOriginalFilename());
-        List<UploadData> uploadDataList = excelService.importExcel(file);
+        if (file.isEmpty()) {
+            return;
+        }
+        String originalFilename = file.getOriginalFilename();
+        String fileExtension = getFileExtension(originalFilename);
+        List<UploadData> uploadDataList;
+        if ("xlsx".equalsIgnoreCase(fileExtension) || "xls".equalsIgnoreCase(fileExtension)) {
+            uploadDataList = handleExcelFile(file);
+        } else if ("csv".equalsIgnoreCase(fileExtension)) {
+            uploadDataList = handleCsvFile(file);
+        } else {
+            throw new RuntimeException("不支持的文件类型");
+        }
         ArrayList<Location> locationList = new ArrayList<>(BATCH_COUNT);
         List<ExportData> exportDataList = new ArrayList<>(uploadDataList.size());
         if (CollectionUtils.isNotEmpty(uploadDataList)) {
@@ -108,11 +123,33 @@ public class LocationController {
                     // 存储完成清理 list
                     locationList = new ArrayList<>(BATCH_COUNT);
                 }
-                if (CollectionUtils.isNotEmpty(locationList)) {
-                    locationService.saveBatch(locationList);
-                }
+            }
+            if (CollectionUtils.isNotEmpty(locationList)) {
+                locationService.saveBatch(locationList);
             }
         }
         excelService.exportExcel(exportDataList, response);
+    }
+
+    private List<UploadData> handleCsvFile(MultipartFile file) {
+        try {
+            CsvImportParams params = new CsvImportParams();
+            params.setHeadRows(1);
+            return CsvImportUtil.importCsv(file.getInputStream(), UploadData.class, params);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<UploadData> handleExcelFile(MultipartFile file) {
+        return excelService.importExcel(file);
+    }
+
+    private String getFileExtension(String filename) {
+        int lastIndexOfDot = filename.lastIndexOf('.');
+        if (lastIndexOfDot == -1) {
+            return "";
+        }
+        return filename.substring(lastIndexOfDot + 1).toLowerCase();
     }
 }

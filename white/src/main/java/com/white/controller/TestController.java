@@ -14,7 +14,7 @@ public class TestController {
 
     @RequestMapping("/health")
     public String health(){
-        return "health2";
+        return "health3";
     }
 }
 
