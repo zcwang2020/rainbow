@@ -8,7 +8,7 @@ spring:
   datasource:
     url: ${MY_APP_DB_URL:jdbc:mysql://localhost:3306/white?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true}
     username: ${DB_USERNAME:abc123}
-    password: ${DB_PASSWORD:abc123}
+    password: ${DB_PASSWORD:sm26B)k4FxN,dPG.}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -33,4 +33,4 @@ logging:
   level:
     com.white: debug
 gaode:
-  key: ${GAODE_KEY}
+  key: ${GAODE_KEY:1}

@@ -12,5 +12,7 @@ public class UserJsonInfo {
 
     private Integer age;
 
-    private String city;
+    private String intro;
+
+    private String gender;
 }

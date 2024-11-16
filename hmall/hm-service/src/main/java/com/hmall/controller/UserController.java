@@ -1,6 +1,9 @@
 package com.hmall.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hmall.domain.dto.LoginFormDTO;
+import com.hmall.domain.po.User;
 import com.hmall.domain.vo.UserLoginVO;
 import com.hmall.service.IUserService;
 import io.swagger.annotations.Api;
@@ -10,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @Api(tags = "用户相关接口")
 @RestController
@@ -33,6 +38,13 @@ public class UserController {
     @PutMapping("/money/deduct")
     public void deductMoney(@RequestParam("pw") String pw,@RequestParam("amount") Integer amount){
         userService.deductMoney(pw, amount);
+    }
+
+    @GetMapping("")
+    public IPage<User> list(@RequestParam(defaultValue = "1", required = false) Integer pageNo,
+                             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
+        // 查询转UserVO
+        return userService.page(Page.of(pageNo, pageSize));
     }
 }
 
