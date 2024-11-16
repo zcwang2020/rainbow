@@ -7,7 +7,7 @@ spring:
     name: white
   datasource:
     url: ${MY_APP_DB_URL:jdbc:mysql://localhost:3306/white?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true}
-    username: ${DB_USERNAME:root}
+    username: ${DB_USERNAME:abc123}
     password: ${DB_PASSWORD:abc123}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
