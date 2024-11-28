@@ -90,7 +90,6 @@ public class MpServiceTest {
             user.setPhone("13800138000");
             UserJsonInfo userJsonInfo = new UserJsonInfo();
             userJsonInfo.setAge(i);
-            userJsonInfo.setCity("北京");
             user.setInfo(userJsonInfo);
             user.setStatus(UserStatusEnum.NORMAL);
             user.setBalance(i);

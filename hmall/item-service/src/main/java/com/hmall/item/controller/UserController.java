@@ -1,7 +1,5 @@
-package com.hmall.controller;
+package com.hmall.item.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hmall.domain.dto.LoginFormDTO;
 import com.hmall.domain.po.User;
 import com.hmall.domain.vo.UserLoginVO;
@@ -13,8 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @Api(tags = "用户相关接口")
 @RestController
