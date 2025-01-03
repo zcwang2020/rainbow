@@ -2,7 +2,7 @@ server:
   port: 8085
 spring:
   application:
-    name: item-service
+    name: pay-service
   profiles:
     active: dev
   datasource:
@@ -38,5 +38,5 @@ knife4j:
         group-name: default
         api-rule: package
         api-rule-resources:
-          - com.hmall.item.controller
+          - com.hmall.pay.controller
 # keytool -genkeypair -alias hmall -keyalg RSA -keypass hmall123 -keystore hmall.jks -storepass hmall123
