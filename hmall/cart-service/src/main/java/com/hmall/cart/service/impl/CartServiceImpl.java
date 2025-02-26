@@ -3,6 +3,7 @@ package com.hmall.cart.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hmall.cart.client.ItemClient;
 import com.hmall.cart.domain.dto.CartFormDTO;
 import com.hmall.cart.domain.dto.ItemDTO;
 import com.hmall.cart.domain.po.Cart;
@@ -37,6 +38,8 @@ import java.util.stream.Collectors;
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements ICartService {
 
     private final IItemService itemService;
+
+    private final ItemClient itemClient;
 
     @Override
     public void addItem2Cart(CartFormDTO cartFormDTO) {
@@ -126,5 +129,28 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
                 .eq(Cart::getItemId, itemId)
                 .count();
         return count > 0;
+    }
+
+    @Override
+    public List<CartVO> queryMyCartsByIds() {
+        List<ItemDTO> items = itemClient.queryItemByIds(List.of(317578L, 546872L));
+        if (CollUtils.isEmpty(items)) {
+            return CollUtils.emptyList();
+        }
+        for (ItemDTO item : items) {
+            CartVO cartVO = new CartVO();
+            cartVO.setItemId(item.getId());
+            cartVO.setNewPrice(item.getPrice());
+            cartVO.setStatus(item.getStatus());
+            cartVO.setStock(item.getStock());
+        }
+        return items.stream().map(item -> {
+            CartVO cartVO = new CartVO();
+            cartVO.setItemId(item.getId());
+            cartVO.setNewPrice(item.getPrice());
+            cartVO.setStatus(item.getStatus());
+            cartVO.setStock(item.getStock());
+            return cartVO;
+        }).collect(Collectors.toList());
     }
 }

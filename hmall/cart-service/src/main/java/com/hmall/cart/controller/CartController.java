@@ -51,4 +51,10 @@ public class CartController {
     public void deleteCartItemByIds(@RequestParam("ids") List<Long> ids){
         cartService.removeByItemIds(ids);
     }
+
+    @ApiOperation("批量查询购物车中商品")
+    @GetMapping("/ids")
+    public List<CartVO> queryMyCartsByIds(){
+        return cartService.queryMyCartsByIds();
+    }
 }
