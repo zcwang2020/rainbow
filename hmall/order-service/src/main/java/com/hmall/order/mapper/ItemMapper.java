@@ -1,7 +1,7 @@
 package com.hmall.order.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hmall.order.domain.dto.OrderDetailDTO;
+import com.hmall.api.dto.OrderDetailDTO;
 import com.hmall.order.domain.po.Item;
 import org.apache.ibatis.annotations.Update;
 

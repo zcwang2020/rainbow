@@ -1,7 +1,7 @@
 package com.hmall.cart.controller;
 
 
-import com.hmall.cart.domain.dto.CartFormDTO;
+import com.hmall.api.dto.CartFormDTO;
 import com.hmall.cart.domain.po.Cart;
 import com.hmall.cart.domain.vo.CartVO;
 import com.hmall.cart.service.ICartService;
@@ -42,7 +42,8 @@ public class CartController {
 
     @ApiOperation("查询购物车列表")
     @GetMapping
-    public List<CartVO> queryMyCarts(){
+    public List<CartVO> queryMyCarts(@RequestHeader(value = "user-info", required = false) String userInfo){
+        System.out.println("[op:cartService]userInfo = " + userInfo);
         return cartService.queryMyCarts();
     }
     @ApiOperation("批量删除购物车中商品")
