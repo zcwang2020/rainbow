@@ -5,21 +5,41 @@ spring:
     name: item-service
   profiles:
     active: dev
-  datasource:
-    url: jdbc:mysql://${hm.db.host}:13306/hm-item?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: ${hm.db.pw}
   cloud:
     nacos:
       server-addr: 192.168.10.79:8848/
-mybatis-plus:
-  configuration:
-    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
-  global-config:
-    db-config:
-      update-strategy: not_null
-      id-type: auto
+#  datasource:
+#    url: jdbc:mysql://${hm.db.host}:13306/hm-item?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: ${hm.db.pw}
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    druid:
+#      # 连接池核心参数
+#      initial-size: 10       # 初始化连接数
+#      min-idle: 10           # 最小空闲连接
+#      max-active: 50         # 最大连接数
+#      max-wait: 60000        # 获取连接超时时间（ms）
+#      # 连接检测与回收
+#      time-between-eviction-runs-millis: 60000  # 检测空闲连接间隔
+#      min-evictable-idle-time-millis: 300000    # 连接最小存活时间
+#      validation-query: SELECT 1                # 连接有效性检测 SQL
+#      test-while-idle: true                     # 空闲时检测连接
+#      test-on-borrow: false                     # 申请连接时检测连接
+#      test-on-return: false                     # 归还连接时检测连接
+#      pool-prepared-statements: true            # 打开 PSCache
+#      max-pool-prepared-statement-per-connection-size: 20  # 每个连接上 PSCache 的大小
+#      filters: stat,wall,log4j                  # 配置监控统计拦截的 filters
+#      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  # 合并 SQL 和慢 SQL 记录
+#      use-global-data-source-stat: true
+
+#mybatis-plus:
+#  configuration:
+#    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+#  global-config:
+#    db-config:
+#      update-strategy: not_null
+#      id-type: auto
 logging:
   level:
     com.hmall: debug
