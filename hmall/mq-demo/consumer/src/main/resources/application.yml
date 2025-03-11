@@ -8,3 +8,6 @@ spring:
     username: hmall
     password: admin123
     virtual-host: /hmall
+    listener:
+      simple:
+        prefetch: 1

@@ -1,3 +1,4 @@
+/*
 package com.hmall.user.config;
 
 import cn.hutool.core.collection.CollUtil;
@@ -20,10 +21,12 @@ public class MvcConfig implements WebMvcConfigurer {
    private final JwtTool jwtTool;
    private final AuthProperties authProperties;
 
+*/
 /*    @Bean
     public CommonExceptionAdvice commonExceptionAdvice(){
         return new CommonExceptionAdvice();
-    }*/
+    }*//*
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -53,3 +56,4 @@ public class MvcConfig implements WebMvcConfigurer {
 
     }
 }
+*/
