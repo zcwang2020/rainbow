@@ -24,8 +24,10 @@ public class NormalConfiguration {
     // 声明第1个队列
     @Bean
     public Queue normalQueue(){
-        return QueueBuilder.durable("normal.queue").build();
-        // return new Queue("normal.queue");
+        return QueueBuilder
+                .durable("normal.queue")
+                .deadLetterExchange("dlx.direct")
+                .build();
     }
 
     //绑定normal队列和normal交换机
