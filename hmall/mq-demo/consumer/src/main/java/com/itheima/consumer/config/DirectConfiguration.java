@@ -10,7 +10,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// @Configuration
+@Configuration
 public class DirectConfiguration {
 
     // 声明FanoutExchange交换机
@@ -45,5 +45,6 @@ public class DirectConfiguration {
     public Binding directBindingQueue2(Queue directQueue2, DirectExchange directExchange){
         return BindingBuilder.bind(directQueue2).to(directExchange).with("red");
     }
+
 }
 

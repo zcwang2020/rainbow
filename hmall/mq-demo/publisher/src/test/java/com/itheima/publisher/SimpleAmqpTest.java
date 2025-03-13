@@ -1,6 +1,9 @@
 package com.itheima.publisher;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,5 +70,28 @@ class SimpleAmqpTest {
         messaege.put("name", "zhangsan");
         messaege.put("age", 18);
         rabbitTemplate.convertAndSend(queueName, messaege);
+    }
+
+    @Test
+    void testOrder() {
+        // 队列名称
+        String exchange = "pay.order.exchange";
+        // 消息
+        Map<String, Object> messaege = new HashMap<>();
+        messaege.put("name", "zhangsan");
+        messaege.put("age", 18);
+        rabbitTemplate.convertAndSend(exchange, "success", messaege);
+    }
+
+    @Test
+    void testDlx() {
+        // 测试死信队列，normal.direct消息没有对应的消费者，设置10s过期时间
+        rabbitTemplate.convertAndSend("normal.direct", "dlx", "normal dlx test", new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                message.getMessageProperties().setExpiration("10000");
+                return message;
+            }
+        });
     }
 }

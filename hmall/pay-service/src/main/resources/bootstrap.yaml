@@ -12,3 +12,4 @@ spring:
           - data-id: public-jdbc.yaml
           - data-id: public-log.yaml
           - data-id: public-swagger.yaml
+          - data-id: public-rabbitmq.yaml

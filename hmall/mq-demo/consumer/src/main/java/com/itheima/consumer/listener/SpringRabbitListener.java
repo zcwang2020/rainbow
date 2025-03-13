@@ -1,5 +1,6 @@
 package com.itheima.consumer.listener;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -83,6 +84,13 @@ public class SpringRabbitListener {
 
     @RabbitListener(queues = "topic.queue2")
     public void listenTopicQueue2(String msg) {
+        log.error("消费者--2---监听到topic.queue2消息:{}", msg);
+    }
+
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "dlx.queue", durable = "true"),
+            exchange = @Exchange(value = "dlx.direct"),
+            key = {"dlx.key"}))
+    public void listenDlxQueue(String msg) {
         log.error("消费者--2---监听到topic.queue2消息:{}", msg);
     }
 }

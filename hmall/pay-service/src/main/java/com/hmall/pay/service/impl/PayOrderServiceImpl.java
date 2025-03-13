@@ -13,9 +13,14 @@ import com.hmall.pay.domain.dto.PayOrderFormDTO;
 import com.hmall.pay.domain.po.Order;
 import com.hmall.pay.domain.po.PayOrder;
 import com.hmall.pay.enums.PayStatus;
+import com.hmall.pay.mapper.OrderMapper;
 import com.hmall.pay.mapper.PayOrderMapper;
 import com.hmall.pay.service.IPayOrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +34,7 @@ import java.time.LocalDateTime;
  * @author 虎哥
  * @since 2023-05-16
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> implements IPayOrderService {
@@ -36,6 +42,12 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     private final UserClient userClient;
 
     private final OrderClient orderClient;
+
+    private final RabbitTemplate rabbitTemplate;
+
+    private final String ORDER_EXCHANGE = "pay.order.exchange";
+
+    private final String ORDER_TOPIC = "success";
 
     @Override
     public String applyPayOrder(PayApplyDTO applyDTO) {
@@ -62,8 +74,16 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         if (!success) {
             throw new BizIllegalException("交易已支付或关闭！");
         }
-        // 5.修改订单状态
-        orderClient.markOrderPaySuccess(po.getBizOrderNo());
+
+        // // 5.修改订单状态
+        // orderClient.markOrderPaySuccess(po.getBizOrderNo());
+        log.info("发送MQ消息修改订单状态,order:{}", po.getBizOrderNo());
+        // 同步修改订单状态改为mq通知
+        try {
+            rabbitTemplate.convertAndSend(ORDER_EXCHANGE, ORDER_TOPIC, po.getBizOrderNo());
+        } catch (AmqpException e) {
+            log.error("发送MQ消息修改订单状态失败,order:{}", po.getBizOrderNo());
+        }
     }
 
     public boolean markPayOrderSuccess(Long id, LocalDateTime successTime) {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient("order-service")
 public interface OrderClient {
-    @PutMapping("/orders/{{orderId}}")
+    @PutMapping("/orders/{orderId}")
     public void markOrderPaySuccess(@PathVariable("orderId") Long orderId);
 
 }

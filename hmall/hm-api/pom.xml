@@ -24,6 +24,7 @@
             <artifactId>hm-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+
         <!--openFeign依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -44,6 +45,16 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.6.6</version>
             <scope>compile</scope>
+        </dependency>
+        <!--AMQP依赖，包含RabbitMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <!--json依赖-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 </project>
