@@ -58,6 +58,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <!-- netbuy -->
+        <dependency>
+            <groupId>com.netease.bahamut.purchase.sdk</groupId>
+            <artifactId>purchase-sdk</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netease.bahamut</groupId>
+            <artifactId>dike-sdk</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -70,10 +84,23 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>15</source>
-                    <target>15</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.32</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+    <!-- netbuy -->
+    <repository>
+        <id>unus-public</id>
+        <url>https://mirrors.unus.netease.com/repository/unus-public-release/</url>
+    </repository>
+    </repositories>
 </project>

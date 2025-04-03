@@ -34,3 +34,7 @@ logging:
     com.white: debug
 gaode:
   key: ${GAODE_KEY:1}
+dike:
+  url: ${DIKE_URL:https://dep176-open-dike.netease.com}
+  app-id: ${DIKE_APP_ID:wangyilegu}
+  app-secret: ${DIKE_APP_SECRET:abc123}

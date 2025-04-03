@@ -132,6 +132,19 @@
             <artifactId>easypoi-annotation</artifactId>
             <version>4.5.0</version>
         </dependency>
+
+        <!-- netbuy -->
+        <dependency>
+            <groupId>com.netease.bahamut.purchase.sdk</groupId>
+            <artifactId>purchase-sdk</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netease.bahamut</groupId>
+            <artifactId>dike-sdk</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -150,5 +163,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!-- netbuy -->
+        <repository>
+            <id>unus-public</id>
+            <url>https://mirrors.unus.netease.com/repository/unus-public-release/</url>
+        </repository>
+    </repositories>
 
 </project>
