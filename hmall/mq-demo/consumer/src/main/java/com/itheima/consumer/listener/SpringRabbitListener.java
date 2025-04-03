@@ -89,8 +89,8 @@ public class SpringRabbitListener {
 
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "dlx.queue", durable = "true"),
             exchange = @Exchange(value = "dlx.direct"),
-            key = {"dlx.key"}))
+            key = {"dlx"}))
     public void listenDlxQueue(String msg) {
-        log.error("消费者--2---监听到topic.queue2消息:{}", msg);
+        log.error("dlx 测试:{}", msg);
     }
 }
