@@ -1,0 +1,5 @@
+hm:
+  db:
+    host: 116.62.157.97
+    name: hm-address
+    pw: abc123

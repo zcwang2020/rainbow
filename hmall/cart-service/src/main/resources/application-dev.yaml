@@ -1,0 +1,12 @@
+hm:
+  db:
+    host: 116.62.157.97
+    name: hm-cart
+    pw: abc123
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8090
+        client-ip: 127.0.0.1
+      http-method-specify: true

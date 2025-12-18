@@ -1,0 +1,10 @@
+hm:
+  db:
+    host: 116.62.157.97
+    name: hm-user
+    pw: abc123
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8090

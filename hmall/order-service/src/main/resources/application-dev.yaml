@@ -1,0 +1,17 @@
+hm:
+  db:
+    host: 116.62.157.97
+    name: hm-order
+    pw: abc123
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8090
+      http-method-specify: true # 启用请求方式限流
+mq:
+  host: 116.62.157.97
+  user: hmall
+  pass: admin123
+  virtual:
+    host: /hmall

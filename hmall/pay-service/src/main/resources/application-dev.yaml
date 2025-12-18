@@ -1,0 +1,11 @@
+hm:
+  db:
+    host: 116.62.157.97
+    name: hm-pay
+    pw: abc123
+mq:
+  host: 116.62.157.97
+  user: hmall
+  pass: admin123
+  virtual:
+    host: /hmall
