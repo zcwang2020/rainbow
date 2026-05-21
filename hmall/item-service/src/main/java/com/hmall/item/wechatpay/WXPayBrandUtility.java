@@ -33,6 +33,9 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class WXPayBrandUtility {
     private static final Gson gson = new GsonBuilder()
             .disableHtmlEscaping()
@@ -589,11 +592,53 @@ public class WXPayBrandUtility {
      */
     public static Notification parseNotification(String apiv3Key, String wechatpayPublicKeyId,
                                                  PublicKey wechatpayPublicKey, Headers headers,
-                                                 String body) {
-        validateNotification(wechatpayPublicKeyId, wechatpayPublicKey, headers, body);
+                                                 String body) throws Exception {
+        int bodyLength = body == null ? 0 : body.length();
+        log.info("[WXPayBrandUtility] parseNotification step=start, publicKeyId={}, bodyLength={}",
+                wechatpayPublicKeyId, bodyLength);
+        try {
+            validateNotification(wechatpayPublicKeyId, wechatpayPublicKey, headers, body);
+            log.info("[WXPayBrandUtility] parseNotification step=validate_ok, publicKeyId={}",
+                    wechatpayPublicKeyId);
+        } catch (Exception ex) {
+            log.warn("[WXPayBrandUtility] parseNotification step=validate_fail, publicKeyId={}, reason={}",
+                    wechatpayPublicKeyId, ex.getMessage());
+            throw ex;
+        }
+        return parseNotificationDecryptLocal(apiv3Key, body);
+    }
+
+    /**
+     * 验签通过后：SDK {@link #aesAeadDecrypt} 与 {@link WechatPayAesUtil} 各执行一遍（默认 SunJCE，便于 JDK8 对比）。
+     */
+    private static Notification parseNotificationDecryptLocal(String apiv3Key, String body) throws Exception {
         Notification notification = gson.fromJson(body, Notification.class);
-        notification.decrypt(apiv3Key);
-        return notification;
+        log.info("[WXPayBrandUtility] parseNotification step=gson_ok, notificationId={}, eventType={}, notificationJson={}",
+                notification.getId(), notification.getEventType(), body);
+        Exception sdkDecryptEx = null;
+        try {
+            notification.decrypt(apiv3Key);
+            log.info("[WXPayBrandUtility] parseNotification step=decrypt_ok, notificationId={}, plaintextLength={}",
+                    notification.getId(), notification.getPlaintext().length());
+        } catch (Exception ex) {
+            sdkDecryptEx = ex;
+            log.warn("[WXPayBrandUtility] parseNotification step=decrypt_fail, notificationId={}, reason={}",
+                    notification.getId(), ex.getMessage());
+        }
+        try {
+            notification.decryptWithOfficialAes(apiv3Key);
+            log.info("[WXPayBrandUtility] parseNotification step=decrypt_official_aes_ok, notificationId={}, "
+                            + "plaintextLength={}, plaintext={}",
+                    notification.getId(), notification.getPlaintext().length(), notification.getPlaintext());
+            return notification;
+        } catch (Exception ex) {
+            log.warn("[WXPayBrandUtility] parseNotification step=decrypt_official_aes_fail, notificationId={}, reason={}",
+                    notification.getId(), ex.getMessage());
+            if (sdkDecryptEx != null) {
+                throw sdkDecryptEx;
+            }
+            throw ex;
+        }
     }
 
     /**
@@ -606,6 +651,8 @@ public class WXPayBrandUtility {
         setSkipTimestampCheckForLocalDebug(true);
         try {
             return parseNotification(apiv3Key, wechatpayPublicKeyId, wechatpayPublicKey, headers, body);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             setSkipTimestampCheckForLocalDebug(previous);
         }
@@ -728,6 +775,17 @@ public class WXPayBrandUtility {
          */
         public String getPlaintext() {
             return plaintext;
+        }
+
+        private void decryptWithOfficialAes(String apiv3Key) throws Exception {
+            if (resource == null) {
+                throw new IllegalArgumentException("missing resource in notification");
+            }
+            WechatPayAesUtil aesUtil = new WechatPayAesUtil(apiv3Key.getBytes(StandardCharsets.UTF_8));
+            plaintext = aesUtil.decryptToString(
+                    resource.getAssociatedData().getBytes(StandardCharsets.UTF_8),
+                    resource.getNonce().getBytes(StandardCharsets.UTF_8),
+                    resource.getCiphertext());
         }
 
         private void validate() {

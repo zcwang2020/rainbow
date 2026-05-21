@@ -2,20 +2,24 @@ package com.hmall.item.wechatpay;
 
 import com.alibaba.fastjson.JSON;
 import okhttp3.Headers;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * 严选商品券回调本地调试（rainbow/item-service）。
- * 仅保留跳过 5 分钟时间戳、仍验签+解密的用例。
+ * 严选商品券回调本地调试。密钥走 Spring {@link ConfigurationProperties} + profile wechatpay-local。
  */
-public class ProductCouponNotifyParseDebugTest {
-
-    private static final String API_V3_KEY = "";
-    private static final String WECHAT_PAY_PUBLIC_KEY_ID =
-            "";
+@SpringBootTest(classes = WechatPayNotifyTestConfiguration.class)
+@ActiveProfiles("wechatpay-local")
+class ProductCouponNotifyParseDebugTest {
 
     private static final String NOTIFY_BODY =
             "{\"id\":\"3fd537f2-56a8-5bad-bda8-aa8c33d4f4a2\",\"create_time\":\"2026-05-19T20:39:37+08:00\","
@@ -25,40 +29,51 @@ public class ProductCouponNotifyParseDebugTest {
                     + "\"associated_data\":\"product_coupon\",\"nonce\":\"RyEAOXA83YES\"}}";
 
     private static final String WECHATPAY_TIMESTAMP = "1779225770";
-    private static final String WECHATPAY_NONCE = "";
+    /** HTTP 头 Wechatpay-Nonce（≠ body.resource.nonce） */
+    private static final String WECHATPAY_NONCE = "s2TO4Wu2FbOkf7hpQxLa3YvKb6Jmm6bm";
     private static final String WECHATPAY_SIGNATURE =
             "YNFzf7pNYteV08Gypn+rh8d7PalqRcbqCMYfKZM/3ZMRj9Tlfho1PLu24qDIW5J9bMCRKB2FeF8YZ3aUB5nWmdeXQgPL9J9TznAU9jnpChb0+zSq8W1jrXtSM8IS/7XfAcgOUTU9i7cuSMbnCVlCoyV6ZvVl4TC2v7miW4JpI+yOrOAfRwWvs8o3zmkaUSYgWVOVzESCEdbo0gqrEOvvtStX0KFr1Bj+4eQscI9CtsnmtQohD4wA8iP0tUtsrK2gTDiAdVKPOTt9nPKAzija6AbWo6Jj4CtnHl7HNeU2TXhb20q+uuD/UWUM1fjYgrvtwGkGzoE60MMjlJDtYHx25w==";
 
+    @Autowired
+    private WechatPayProductCouponProperties wechatPayProps;
+
     private ProductCouponNotifyParseSupport parseSupport;
 
-    @BeforeMethod
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
+        Assumptions.assumeTrue(isNotBlank(wechatPayProps.getApiV3Key())
+                        && isNotBlank(wechatPayProps.getWechatPayPublicKeyId()),
+                () -> "缺少 application-wechatpay-local.yaml，请配置 wechatpay.product-coupon.api-v3-key / wechat-pay-public-key-id");
         System.setProperty("wechatpay.notify.skipTimestampCheck", "true");
-        parseSupport = ProductCouponNotifyParseSupport.forMch001(API_V3_KEY, WECHAT_PAY_PUBLIC_KEY_ID);
+        parseSupport = ProductCouponNotifyParseSupport.forMch001(
+                wechatPayProps.getApiV3Key(), wechatPayProps.getWechatPayPublicKeyId());
     }
 
-    @AfterMethod
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         System.clearProperty("wechatpay.notify.skipTimestampCheck");
     }
 
-  /** 对齐严选 parseNotificationOrThrow；跳过时间戳，仍验签并解密。 */
     @Test
-    public void parseNotification_full_skipTimestamp() {
+    void parseNotification_full_skipTimestamp() {
         WXPayBrandUtility.Notification notification =
                 parseSupport.parseNotificationOrThrow(buildNotifyHeaders(), NOTIFY_BODY);
-        Assert.assertEquals(notification.getId(), "3fd537f2-56a8-5bad-bda8-aa8c33d4f4a2");
-        Assert.assertNotNull(notification.getPlaintext());
+        assertEquals("3fd537f2-56a8-5bad-bda8-aa8c33d4f4a2", notification.getId());
+        assertNotNull(notification.getPlaintext());
         System.out.println("[ProductCouponNotifyParseDebug] notification=" + JSON.toJSONString(notification));
     }
 
-    private static Headers buildNotifyHeaders() {
+    private Headers buildNotifyHeaders() {
         return new Headers.Builder()
                 .add("Wechatpay-Timestamp", WECHATPAY_TIMESTAMP)
                 .add("Wechatpay-Nonce", WECHATPAY_NONCE)
-                .add("Wechatpay-Serial", WECHAT_PAY_PUBLIC_KEY_ID)
+                .add("Wechatpay-Serial", wechatPayProps.getWechatPayPublicKeyId())
                 .add("Wechatpay-Signature", WECHATPAY_SIGNATURE)
                 .add("Wechatpay-Signature-Type", "WECHATPAY-BRAND-SHA256-RSA2048")
                 .build();
+    }
+
+    private static boolean isNotBlank(String s) {
+        return s != null && !s.trim().isEmpty();
     }
 }

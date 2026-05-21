@@ -62,7 +62,7 @@ public class ProductCouponNotifyParseSupport {
 
     private WXPayBrandUtility.Notification parseNotificationWithConfig(WechatPayMerchantConfig config,
                                                                        PublicKey wechatpayPublicKey,
-                                                                       Headers headers, String body) {
+                                                                       Headers headers, String body) throws Exception {
         if (Boolean.parseBoolean(System.getProperty("wechatpay.notify.skipTimestampCheck", "false"))) {
             return WXPayBrandUtility.parseNotificationForLocalDebug(
                     config.getApiV3Key(),

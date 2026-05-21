@@ -10,3 +10,7 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 .idea/
+
+# 微信支付本地密钥/配置（勿提交 Git，本机保留即可）
+**/certs/wechatpay/*.pem
+**/application-wechatpay-local.yaml
